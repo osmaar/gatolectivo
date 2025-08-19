@@ -1,58 +1,55 @@
 // Global variables
-export const siteLang = "en-US";
-export const siteCurrency = "USD";
-export const siteDomain = "pawstronaut.com";
-export const siteName = "Pawstronaut";
-export const siteSlogan = "The best pet shelter in the galaxy!";
-export const themeColor = "#FF0000";
+export const siteLang = 'es-MX';
+export const siteCurrency = 'MXN';
+export const siteDomain = 'gatolectivo.org';
+export const siteName = 'Gatolectivo';
+export const siteSlogan = '¡Maullidos de la ciudad!';
+export const themeColor = '#FF0000';
 
 export const phone = {
-	href: "tel:+123456789",
-	label: "(123) 456-789",
+  href: 'tel:+52551378 5345',
+  label: '52 551378 5345',
 };
 
 export const email = {
-	href: "mailto:info@pawstronaut.com",
-	label: "info@pawstronaut.com",
+  href: 'mailto:contacto@gatolectivo.org',
+  label: 'contacto@gatolectivo.org',
 };
 
 export const address = {
-	street: "1234 Space Street",
-	city: "Galaxy City",
-	zip: "12345",
-	state: "Milky Way",
-	country: "Space",
+  city: 'Ciudad de México',
+  country: 'México',
 };
 
 export const socialMedia = {
-	facebook: {
-		url: "https://facebook.com",
-		label: "Facebook",
-		icon: "facebook",
-	},
-	x: {
-		url: "https://x.com",
-		label: "X",
-		icon: "x",
-	},
-	instagram: {
-		url: "https://instagram.com",
-		label: "Instagram",
-		icon: "instagram",
-	},
-	youtube: {
-		url: "https://youtube.com",
-		label: "YouTube",
-		icon: "youtube",
-	},
+  facebook: {
+    url: 'https://www.facebook.com/gatolectivo',
+    label: 'Facebook',
+    icon: 'facebook',
+  },
+  x: {
+    url: 'https://x.com/gatolectivo',
+    label: 'X',
+    icon: 'x',
+  },
+  instagram: {
+    url: 'https://www.instagram.com/gatolectivo',
+    label: 'Instagram',
+    icon: 'instagram',
+  },
+  youtube: {
+    url: 'https://t.me/gatolectivo',
+    label: 'Telegram',
+    icon: 'telegram',
+  },
 };
 
 export const hours = {
-	monday: "9:00 - 17:00",
-	tuesday: "9:00 - 17:00",
-	wednesday: "9:00 - 17:00",
-	thursday: "9:00 - 17:00",
-	friday: "9:00 - 17:00",
-	saturday: "9:00 - 17:00",
-	sunday: "Closed",
+  Lunes: '10:00 - 17:00',
+  Martes: '10:00 - 17:00',
+  Miércoles: '10:00 - 17:00',
+  Jueves: '10:00 - 17:00',
+  Viernes: '10:00 - 17:00',
+  Sábado: '10:00 - 17:00',
+  Domingo: '10:00 - 17:00',
 };

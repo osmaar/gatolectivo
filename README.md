@@ -1,48 +1,75 @@
-# Pawstronaut
+![Gatolectivo](src/assets/images/logo_letras_gatolectivo.png)
 
-Pawstronaut is a free theme for the Astro framework, designed specifically for animal shelters. It provides a beautiful and functional starting point for your next animal shelter website. Whether you're running a cat shelter, dog shelter, or any other type of animal rescue organization, Pawstronaut has you covered with its clean design and easy-to-use components.
+Gatolectivo es una plataforma de apoyo a animales comunitarios y en situación de riesgo, especializada en el cuidado y rescate de colonias felinas ferales en la Ciudad de México. Nace en enero de 2017 con el propósito de documentar y respaldar la labor de procuración de una colonia felina feral cerca de la colonia El Rosario, en la alcaldía Azcapotzalco.
 
-## 🌟 About Pawstronaut
+## 🐱 Sobre Gatolectivo
 
-Pawstronaut is perfect for animal shelter owners, developers, and designers who want to quickly set up a stylish and responsive website. It leverages modern web technologies to ensure a smooth and performant user experience.
+Gatolectivo es una organización comprometida con el bienestar animal que se dedica a:
 
-## 🛠️ Technologies Used
+- **Rescate y cuidado** de colonias felinas ferales
+- **Protocolo TNR** (Atrapa, Esteriliza, Libera)
+- **Adopciones responsables** con seguimiento personalizado
+- **Educación** sobre tenencia responsable de mascotas
+- **Red de hogares temporales** para animales rescatados
+- **Apoyo veterinario** y atención médica preventiva
 
--   **Astro**: The core framework for building fast, content-focused websites.
--   **TailwindCSS**: A utility-first CSS framework for rapid UI development.
--   **Alpine.js**: A lightweight JavaScript framework for adding interactivity.
+### 🏆 Nuestros Logros (2017-2023)
 
-## 🚀 Installation and Deployment
+- Apoyo a colonias felinas en alcaldías: Coyoacán, Cuauhtémoc, Benito Juárez, Iztacalco e Iztapalapa
+- Seguimiento a cerca de **300 solicitudes de adopción**
+- Creación del **Proyecto Santuario Michican** para gatos ferales gerontes
+- Participación en eventos como: FestiKat, MiauFest, Bazar La Veganería, entre otros
+- Red activa de hogares temporales con **44 animales en resguardo** (2023)
 
-To get started with Pawstronaut, follow these steps:
+## 🛠️ Tecnologías Utilizadas
 
-1. **Clone Pawstronaut**:
+Este sitio web está construido con tecnologías modernas para garantizar una experiencia rápida y accesible:
 
-    ```sh
-    git clone https://github.com/your-repo/Pawstronaut.git
-    ```
+- **Astro**: Framework principal para sitios web rápidos y centrados en contenido
+- **TailwindCSS**: Framework CSS utilitario para desarrollo ágil de interfaces
+- **Alpine.js**: Framework JavaScript ligero para interactividad
+- **MDX**: Para contenido enriquecido con componentes
+- **WordPress Headless**: CMS backend para gestión autoadministrable de contenido
 
-2. **Install Dependencies**:
+## 🔄 Arquitectura Headless
 
-    ```sh
-    npm install
-    ```
+Este proyecto implementa una arquitectura **Headless CMS** donde:
 
-3. **Run Development Server**:
+- **Frontend**: Astro genera un sitio estático rápido y optimizado
+- **Backend**: WordPress proporciona una interfaz administrativa familiar y autoadministrable
+- **API**: Conexión entre Astro y WordPress para contenido dinámico
+- **Beneficios**:
+  - Gestión de contenido fácil para el equipo de Gatolectivo
+  - Rendimiento superior del sitio web
+  - Flexibilidad para futuras integraciones
+  - Actualizaciones de contenido sin conocimientos técnicos
 
-    ```sh
-    npm run dev
-    ```
+## 🚀 Instalación y Desarrollo
 
-4. **Build for Production**:
+Para ejecutar este proyecto localmente:
 
-    ```sh
-    npm run build
-    ```
+1. **Clonar el repositorio**:
+   ```sh
+   git clone https://github.com/tu-usuario/gatolectivo.git
+   cd gatolectivo
+   ```
 
-## 📂 Project Structure
+2. **Instalar dependencias**:
+   ```sh
+   npm install
+   ```
 
-Inside of your Pawstronaut project, you'll see the following folders and files:
+3. **Ejecutar servidor de desarrollo**:
+   ```sh
+   npm run dev
+   ```
+
+4. **Compilar para producción**:
+   ```sh
+   npm run build
+   ```
+
+## 📂 Estructura del Proyecto
 
 ```text
 /
@@ -50,57 +77,86 @@ Inside of your Pawstronaut project, you'll see the following folders and files:
 │   └── favicon.svg
 ├── src/
 │   ├── assets/
+│   │   └── images/
+│   │       └── logo_letras_gatolectivo.png
 │   ├── components/
+│   ├── data/
+│   │   └── names.json
 │   ├── layouts/
 │   │   └── Layout.astro
 │   ├── pages/
 │   │   ├── index.astro
-│   │   ├── about-us.astro
+│   │   ├── nosotros.astro
+│   │   ├── adopciones/
 │   │   ├── blog/
-│   │   ├── cats/
-│   │   ├── contact.astro
-│   │   └── privacy-policy.mdx
+│   │   ├── contacto.astro
+│   │   └── politica-privacidad.astro
 │   └── styles/
 └── package.json
 ```
 
-## 📄 Premade Pages
+## 📄 Páginas Disponibles
 
--   Home
--   About Us
--   Blog
--   Cats
--   Contact
--   Privacy Policy
+- **Inicio**: Presentación de la organización y llamadas a la acción
+- **Nosotros**: Historia, misión, visión y valores de Gatolectivo
+- **Adopciones**: Catálogo de animales disponibles para adopción
+- **Blog**: Artículos sobre cuidado animal y noticias de la organización
+- **Contacto**: Formularios de contacto y información de ubicación
+- **Política de Privacidad**: Cumplimiento con la Ley Federal de Protección de Datos Personales
 
-## 🧩 Available Components
+## 🧩 Componentes Disponibles
 
--   Article
--   Badge
--   Button
--   Card
--   CardBlogPost
--   CardCat
--   CardMember
--   CallToAction
--   Container
--   Faq
--   Footer
--   FormAdoption
--   FormContactastro
--   Header
--   Heading
--   Hero
--   LogoContainer
--   Map
--   Members
--   Section
--   ShowBlogs
--   ShowCats
--   SocialMediaIcons
--   TableHours
--   WideImage
+- **GeneradorNombres**: Generador de nombres mexicanos para mascotas
+- **FormularioAdopcion**: Formulario completo para solicitudes de adopción
+- **TarjetaAnimal**: Componente para mostrar animales disponibles
+- **Mapa**: Integración con mapas para mostrar ubicaciones
+- **RedesSociales**: Enlaces a redes sociales oficiales
+- **HorarioAtencion**: Tabla de horarios de atención
+- **WideImage**: Componente para imágenes de ancho completo
 
-## 👀 Stuck?
+*Nota: Muchos de estos componentes están adaptados del template original Pawstronaut.*
 
-If you have any questions or need help with Pawstronaut, feel free to reach out to me at info@wpinfusion.com, or open an issue on the [Pawstronaut GitHub repository](https://github.com/wpinfusion/pawstronaut)
+## 🤝 Protocolo de Adopción Responsable
+
+Nuestro proceso de adopción sigue los lineamientos de la Ley de Protección Animal de la CDMX:
+
+1. **Publicación** de animales disponibles
+2. **Entrevista** con candidatos
+3. **Solicitud formal** de adopción
+4. **Verificación** de domicilio
+5. **Periodo de prueba** (7-21 días)
+6. **Seguimiento** post-adopción
+
+## 📞 Contacto
+
+- **Sitio web**: [gatolectivo.org](https://gatolectivo.org/)
+- **Email**: contacto@gatolectivo.org
+- **Redes sociales**: Facebook y Twitter oficiales
+
+## 🤝 Cómo Ayudar
+
+Gatolectivo invita a personas interesadas en procurar comunidades felinas ferales a unirse como:
+
+- **Hogares temporales**
+- **Voluntarios** en eventos y actividades
+- **Donantes** para gastos médicos y alimentación
+- **Profesionales** veterinarios y técnicos
+- **Promotores** de adopciones responsables
+
+## 🙏 Créditos
+
+Este sitio web está basado en el template **Pawstronaut**, un tema gratuito para Astro diseñado específicamente para refugios de animales.
+
+- **Template original**: [Pawstronaut](https://github.com/wpinfusion/pawstronaut)
+- **Creado por**: WP Infusion
+- **Contacto del template**: info@wpinfusion.com
+
+Agradecemos al equipo de WP Infusion por crear este excelente punto de partida que hemos adaptado para las necesidades específicas de Gatolectivo.
+
+## 📝 Licencia
+
+Este proyecto está desarrollado para apoyar la labor de Gatolectivo, una organización sin fines de lucro dedicada al bienestar animal en la Ciudad de México.
+
+---
+
+*Colaborando con instituciones, organizaciones independientes y la sociedad en general para atender colonias de gatos ferales, evitando su sobrepoblación y mejorando la calidad y esperanza de vida de la población felina.*
