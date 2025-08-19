@@ -1,7 +1,27 @@
 {
-  "name": "",
+  "name": "gatolectivo",
   "type": "module",
   "version": "0.0.1",
+  "description": "Sitio web de Gatolectivo - Plataforma de apoyo a animales comunitarios y colonias felinas ferales en CDMX",
+  "author": {
+    "name": "Osmar López",
+    "url": "https://osmar-lopez.dev"
+  },
+  "homepage": "https://gatolectivo.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/osmaar/gatolectivo.git"
+  },
+  "keywords": [
+    "gatolectivo",
+    "refugio-animales",
+    "adopcion-responsable",
+    "gatos-ferales",
+    "tnr",
+    "astro",
+    "headless-cms",
+    "wordpress"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -20,5 +40,6 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15"
-  }
+  },
+  "license": "MIT"
 }
