@@ -10,6 +10,7 @@ import CallToAction from "~/components/CallToAction.astro";
 import ShowCats from "~/components/ShowCats.astro";
 import ShowBlogs from "~/components/ShowBlogs.astro";
 import Heading from "~/components/Heading.astro";
+import { BaseWPSchema } from "~/types";
 import CatNameGenerator from "~/components/CatNameGenerator.astro";
 
 // Images
@@ -40,31 +41,37 @@ const faq = [
 const url = 'http://gatolectivo.local/wp-json/wp/v2/pages?slug=inicio'
 const res = await fetch(url)
 const json = await res.json()
-console.log(json);
+const data = BaseWPSchema.parse(json[0])
+console.log(data);
 ---
 
-<Layout title="Home" pageTitle="Home" description="Welcome to our pet shelter!">
+<Layout title={data.title.rendered} pageTitle={`Gatolectivo - ${data.title.rendered}`} description={data.title.rendered}>
 	<Section class:list={"relative"}>
-		<Picture
-			src={CatBackground}
-			alt="Cat"
-			class:list={"absolute inset-0 w-full h-full object-cover"}
-			loading={"eager"}
-			fetchpriority={"high"}
+
+		<img 
+			src={data.featured_images.full.url} 
+			alt={data.featured_images.full.alt}
+			class="absolute inset-0 w-full h-full object-cover"
+			loading="eager"
+			fetchpriority="high"
+			width={data.featured_images.full.width}
+			height={data.featured_images.full.height}
 		/>
 		<div class="bg-gradient-to-r from-fuchsia-500/60 to-teal-500/80 absolute inset-0"></div>
 		<Container class:list={"relative z-10 h-full lg:min-h-svh lg:h-svh"}>
 			<div class="flex items-center h-full">
 				<div class="ml-auto">
 					<div class="prose prose-xl prose-invert text-white lg:text-right text-balance">
-						<h1 class="text-5xl lg:text-8xl mb-0">¡Bienvenido a nuestro refugio para mascotas!</h1>
-						<p>
-						Tenemos una variedad de mascotas disponibles para adopción. Por favor, eche un vistazo a nuestras mascotas disponibles y contáctenos si está interesado en adoptar uno. Siempre estamos buscando hogares amorosos para nuestras mascotas. ¡Gracias por considerar la adopción!
-						</p>
+						<h1 class="text-5xl lg:text-8xl mb-0">{data.acf.subtitle}</h1>
+						<div set:html={data.content.rendered} />
 
-						<div class="not-prose mt-8">
-							<Button url="/cats" color="white"> ¡Adopta ahora! </Button>
-						</div>
+						{data.button_action?.show_button && (
+							<div class="not-prose mt-8">
+								<Button url={data.button_action.url_button} color="white">
+									{data.button_action.text_button}
+								</Button>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
