@@ -9,7 +9,7 @@ export const menuMain = [
 	},
 	{
 		name: "Adopta",
-		url: "/cats",
+		url: "/pets",
 	},
 	{
 		name: "Blog",
