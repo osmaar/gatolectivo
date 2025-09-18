@@ -1,0 +1,45 @@
+---
+import CardPet from "./CardPet.astro";
+import { PetApiSchema } from "~/types"; 
+import type { z } from 'astro:content';
+
+interface Props {
+    petIDs: number[];
+}
+
+const { petIDs } = Astro.props;
+
+type Pet = z.infer<typeof PetApiSchema>;
+
+let petsData: Pet[] = [];
+
+// Si nos pasaron IDs, vamos a buscarlos a la API de WordPress
+if (petIDs && petIDs.length > 0) {
+    // Construimos la URL para pedir varios posts por su ID
+    // Ejemplo: .../wp/v2/pet?include[]=600&include[]=601
+    const params = new URLSearchParams();
+    petIDs.forEach(id => params.append('include[]', id.toString()));
+    
+    const url = `http://gatolectivo.local/wp-json/wp/v2/pet?${params.toString()}`;
+    
+    try {
+        const res = await fetch(url);
+        if (res.ok) {
+            const json = await res.json();
+            petsData = PetApiSchema.array().parse(json);
+        }
+    } catch (error) {
+        console.error("Error fetching pets:", error);
+    }
+}
+---
+
+{petsData.length > 0 && (
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16 xl:gap-24">
+        {petsData.map((pet) => (
+            <CardPet pet={pet} />
+        ))}
+    </div>
+)}
+
+
