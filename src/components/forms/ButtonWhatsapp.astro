@@ -1,0 +1,23 @@
+---
+// src/components/forms/ButtonWhatsapp.astro
+import Button from '~/components/Button.astro';
+
+interface Props {
+    phoneNumber: string;
+    petName: string;
+}
+
+const { phoneNumber, petName } = Astro.props;
+
+// Preparamos el mensaje y lo codificamos para la URL
+const message = `¡Hola! Estoy interesado/a en adoptar a ${petName}. ¿Podrían darme más información?`;
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+<Button 
+    href={whatsappUrl}
+    target="_blank"
+    color="fuchsia"
+    class:list={"button bg-gradient-to-r from-green-500 to-teal-500 text-white"}
+>
+    Contactar por WhatsApp
+</Button>
