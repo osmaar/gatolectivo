@@ -4,13 +4,13 @@ import Section from "~/components/Section.astro";
 import Container from "~/components/Container.astro";
 import { Image, Picture } from "astro:assets";
 import Hero from "~/components/Hero.astro";
+import { PageSchema } from "~/types"; 
 import Button from "~/components/Button.astro";
 import Faq from "~/components/Faq.astro";
 import CallToAction from "~/components/CallToAction.astro";
-import ShowCats from "~/components/ShowCats.astro";
+import ShowPets from "~/components/ShowPets.astro";
 import ShowBlogs from "~/components/ShowBlogs.astro";
 import Heading from "~/components/Heading.astro";
-import { BaseWPSchema } from "~/types";
 import CatNameGenerator from "~/components/CatNameGenerator.astro";
 
 // Images
@@ -41,133 +41,117 @@ const faq = [
 const url = 'http://gatolectivo.local/wp-json/wp/v2/pages?slug=inicio'
 const res = await fetch(url)
 const json = await res.json()
-const data = BaseWPSchema.parse(json[0])
-console.log(data);
+const data = PageSchema.parse(json[0])
+const components = data.acf_fields?.page_components ?? [];
 ---
 
-<Layout title={data.title.rendered} pageTitle={`Gatolectivo - ${data.title.rendered}`} description={data.title.rendered}>
-	<Section class:list={"relative"}>
+<Layout 
+    title={data.seo_meta.title} 
+    pageTitle={`Gatolectivo - ${data.seo_meta.title}`} 
+    description={data.seo_meta.description}
+    image={data.seo_meta.image?.full?.url}
+>
+    {components.map(component => {
 
-		<img 
-			src={data.featured_images.full.url} 
-			alt={data.featured_images.full.alt}
-			class="absolute inset-0 w-full h-full object-cover"
-			loading="eager"
-			fetchpriority="high"
-			width={data.featured_images.full.width}
-			height={data.featured_images.full.height}
-		/>
-		<div class="bg-gradient-to-r from-fuchsia-500/60 to-teal-500/80 absolute inset-0"></div>
-		<Container class:list={"relative z-10 h-full lg:min-h-svh lg:h-svh"}>
-			<div class="flex items-center h-full">
-				<div class="ml-auto">
-					<div class="prose prose-xl prose-invert text-white lg:text-right text-balance">
-						<h1 class="text-5xl lg:text-8xl mb-0">{data.acf.subtitle}</h1>
-						<div set:html={data.content.rendered} />
+		switch (component.block_type) {
+            
+            case 'block_hero':
+                const heroData = component.block_data; 
+                return (
+                    <Section class:list={"relative"}>
 
-						{data.button_action?.show_button && (
-							<div class="not-prose mt-8">
-								<Button url={data.button_action.url_button} color="white">
-									{data.button_action.text_button}
-								</Button>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
-		</Container>
-	</Section>
+                        {heroData.background_image &&
+                            <img 
+                                src={heroData.background_image.url} 
+                                alt={heroData.background_image.alt}
+                                class="absolute inset-0 w-full h-full object-cover"
+                                loading="eager"
+                                fetchpriority="high"
+                                width={heroData.background_image.width}
+                                height={heroData.background_image.height}
+                            />
+                        }
+                        
+                        <div class="bg-gradient-to-r from-fuchsia-500/60 to-teal-500/80 absolute inset-0"></div>
 
-	<Section class:list={"bg-white"}>
-		<Container>
-			<Hero>
-				<div slot="hero-content-left" class="prose">
-					<h2 class="h2 text-teal-500">¡Adopta una mascota hoy!</h2>
-					<p class="leading-loose">
-						Tenemos una variedad de mascotas disponibles para adopción. Por favor, eche un vistazo a nuestras mascotas disponibles y Contáctenos si está interesado en adoptar uno. Siempre estamos buscando hogares amorosos para nuestros Mascotas. ¡Gracias por considerar la adopción!
-					</p>
+                        <Container class:list={"relative z-10 h-full lg:min-h-svh lg:h-svh"}>
+                            <div class="flex items-center h-full">
+                                <div class="ml-auto">
+                                    <div class="prose prose-xl prose-invert text-white lg:text-right text-balance">
+                                        
+                                        <h1 class="text-5xl lg:text-8xl mb-0">{heroData.headline}</h1>
 
-					<div class="not-prose mt-16">
-						<Button url="/cats">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="inline-block size-5 -mt-1 mr-1"
-								viewBox="0 0 14 14"
-								><path
-									fill="currentColor"
-									fill-rule="evenodd"
-									d="M1.777.053A.5.5 0 0 1 2.3.1l3.917 2.947a6.6 6.6 0 0 1 1.564 0L11.7.1a.5.5 0 0 1 .801.4v8.25h.748a.75.75 0 0 1 0 1.5h-.81a4.5 4.5 0 0 1-.479 1.391l1.376.688a.75.75 0 1 1-.67 1.342l-1.654-.827A4.48 4.48 0 0 1 8 14H6a4.48 4.48 0 0 1-3.011-1.156l-1.654.827a.75.75 0 1 1-.67-1.342l1.376-.688a4.5 4.5 0 0 1-.479-1.391h-.81a.75.75 0 0 1 0-1.5H1.5V.5a.5.5 0 0 1 .277-.447M9.124 7.75a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5m-4.25 0a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5m.897 1.605A.5.5 0 0 1 6.25 9h1.5a.5.5 0 0 1 .277.916l-.75.5a.5.5 0 0 1-.554 0l-.75-.5a.5.5 0 0 1-.202-.56Z"
-									clip-rule="evenodd"></path></svg
-							>
-							Adopta un gato
-						</Button>
-					</div>
-				</div>
-				<div slot="hero-content-right" class="-rotate-1">
-					<Image src={CatOne} alt="Cat" class:list={"w-full h-full object-cover rounded-2xl shadow"} />
-				</div>
-			</Hero>
-		</Container>
-	</Section>
+                                        <div set:html={heroData.content} />
 
-	<Section>
-		<Container>
-			<Heading>
-				<h2 slot="heading-title" class="h2 text-teal-500">Gatos disponibles</h2>
-				<p slot="heading-content">
-					Tenemos una variedad de gatos disponibles para adopción. Por favor, eche un vistazo a nuestros gatos disponibles y Contáctenos si está interesado en adoptar uno. Siempre estamos buscando hogares amorosos para nuestros Gatos. ¡Gracias por considerar la adopción!
-				</p>
-			</Heading>
+                                        {heroData.show_button && heroData.url_button && (
+                                            <div class="not-prose mt-8">
+                                                <Button url={heroData.url_button.url} color="white">
+                                                    {heroData.text_button}
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </Container>
+                    </Section>
+                );
+       
+			case 'block_text_image':
+                const textImageData = component.block_data;
+                const isImageRight = textImageData.image_position === 'right';
+                return (
+                    <Section class:list={"bg-white"}>
+                        <Container>
+                            <Hero>
+                                <div slot={isImageRight ? "hero-content-left" : "hero-content-right"} class="prose">
+                                    <h2 class="h2 text-teal-500">{textImageData.headline}</h2>
+                                    <div class="leading-loose" set:html={textImageData.content} />
 
-			<ShowCats cats={["reckoning", "chairman-meow", "pawdre-hepburn"]} />
-		</Container>
-	</Section>
+                                    {textImageData.show_button && textImageData.url_button && (
+                                        <div class="not-prose mt-16">
+                                            <Button url={textImageData.url_button.url}>
+                                                {/* Puedes añadir un SVG si quieres */}
+                                                {textImageData.text_button}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div slot={isImageRight ? "hero-content-right" : "hero-content-left"} class:list={["-rotate-1"]}>
+                                    {textImageData.image &&
+                                    	<Image 
+										src={textImageData.image.url} 
+										alt={textImageData.image.alt ?? ''} 
+										width={textImageData.image.width}
+										height={textImageData.image.height}
+										class:list={"w-full h-full object-cover rounded-2xl shadow"} 
+										/>
+                                    }
+                                </div>
+                            </Hero>
+                        </Container>
+                    </Section>
+                );
 
-	<Section class:list={"bg-white"}>
-		<Container>
-			<Hero invert>
-				<div slot="hero-content-left" class="prose">
-					<h2 class="h2 text-fuchsia-500">Preguntas más frecuentes</h2>
-					<Faq items={faq} color="fuchsia" />
-				</div>
-				<div slot="hero-content-right" class="rotate-1">
-					<Image src={CatTwo} alt="Cat" class:list={"w-full h-full object-cover rounded-2xl shadow"} />
-				</div>
-			</Hero>
-		</Container>
-	</Section>
 
-	<Section class:list={"relative"}>
-		<Image src={CatBackground} alt="Cat" class:list={"absolute inset-0 w-full h-full object-cover"} />
-		<div class="bg-gradient-to-r from-fuchsia-900/80 to-teal-900/80 absolute inset-0"></div>
+			case 'block_featured_pets':
+                const featuredPetsData = component.block_data;
+                return (
+                    <Section>
+                        <Container>
+                            <Heading>
+                                <h2 slot="heading-title" class="h2 text-teal-500">{featuredPetsData.headline}</h2>
+                                <p slot="heading-content">
+                                    {featuredPetsData.intro_content}
+                                </p>
+                            </Heading>
 
-		<Container class:list={"relative z-10"}>
-			<CallToAction
-				title="Contáctenos hoy para adoptar"
-				link={{ title: "Adoptar", url: "/cats", color: "white" }}
-			/>
-		</Container>
-	</Section>
-
-	<Section>
-		<Container>
-			<Heading>
-				<h2 slot="heading-title" class="h2 text-teal-500">Noticias de nuestro refugio</h2>
-				<p slot="heading-content">
-				¡Bienvenidos a nuestro blog! Aquí encontrará las últimas noticias y actualizaciones de nuestro refugio para mascotas. Somos apasionados por ayudar a las mascotas a encontrar hogares amorosos para siempre, y estamos emocionados de compartir nuestras historias contigo. ¡Gracias por apoyar a nuestro refugio!
-				</p>
-			</Heading>
-
-			<ShowBlogs posts={["hello-world", "new-arrival-luna", "new-site-launched"]} />
-		</Container>
-	</Section>
-
-	<Section class:list={"relative"}>
-		<Image src={CatBackground} alt="Cat" class:list={"absolute inset-0 w-full h-full object-cover"} />
-		<div class="bg-gradient-to-r from-fuchsia-900/80 to-teal-900/80 absolute inset-0"></div>
-
-		<Container class:list={"relative z-10"}>
-			<CatNameGenerator title="¡Ayúdame a ponerle nombre a mi nuevo gato!" />
-		</Container>
-	</Section>
+                            <ShowPets petIDs={featuredPetsData.featured_pets} />
+                        </Container>
+                    </Section>
+                );
+        }
+    })}
+	
 </Layout>
