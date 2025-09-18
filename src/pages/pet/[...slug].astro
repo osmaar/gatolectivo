@@ -1,0 +1,198 @@
+---
+import Layout from "~/layouts/Layout.astro";
+import Section from "~/components/Section.astro";
+import Container from "~/components/Container.astro";
+import Button from "~/components/Button.astro";
+import { Image } from "astro:assets";
+import { PetApiSchema } from "~/types";
+import FormAdoption from "~/components/forms/FormAdoption.astro";
+import ButtonWhatsapp from '~/components/forms/ButtonWhatsapp.astro';
+
+// ahora busca los datos en WordPress para saber qué páginas crear
+export async function getStaticPaths() {
+    // 1. Buscamos todas las mascotas en la API de WordPress
+    const url = `http://gatolectivo.local/wp-json/wp/v2/pet?per_page=100`;
+    const res = await fetch(url);
+    const petsJson = await res.json();
+    const pets = PetApiSchema.array().parse(petsJson);
+
+    // 2. Creamos una página para cada mascota, usando su 'slug'
+    return pets.map((pet) => ({
+        params: { slug: pet.slug },
+        props: { pet }, // Pasamos el objeto completo de la mascota a la página
+    }));
+}
+
+// Helper para formatear la fecha que viene de ACF (YYYYMMDD) a un formato legible (DD/MM/YYYY)
+function formatDate(dateString: string) {
+	if (!dateString || dateString.length !== 8) return "N/A";
+	const year = dateString.substring(0, 4);
+	const month = dateString.substring(4, 6);
+	const day = dateString.substring(6, 8);
+	// Usamos el formato YYYY-MM-DD que todos los navegadores entienden
+	return new Date(`${year}-${month}-${day}`).toLocaleDateString('es-MX');
+}
+
+// Recibimos la mascota específica para esta página
+const { pet } = Astro.props;
+
+// Creamos atajos a los datos para que el código sea más legible
+const mainImage = pet.acf?.detail_image?.large; 
+const petName = pet.title.rendered;
+const defaultIntroText =  `Aquí puedes encontrar información detallada sobre nuestra encantadora mascota, ${petName}. Esta sección proporciona información sobre su personalidad, actividades favoritas y rasgos únicos que la hacen especial. Ya sea que estés buscando adoptar o simplemente tengas curiosidad, esperamos que disfrutes aprendiendo más sobre ${petName}.`;
+
+const introText = pet.acf?.use_custom_intro_text ? pet.acf.intro_text_detail : defaultIntroText;
+const genero =  pet.acf?.gender === 'female' ? 'hembra' : 'macho';
+
+const contactMethod = pet.acf?.adoption_contact_method || 'email'; 
+const whatsappNumber = pet.acf?.whatsapp_number;
+
+---
+
+<Layout
+	 title={pet.seo_meta?.title ?? petName} 
+    description={pet.seo_meta?.description ?? ''}
+    image={pet.seo_meta?.image?.full?.url}
+>
+	<Section class="bg-white">
+	  <Container>
+            <div class="bg-white max-w-4xl mx-auto">
+                {mainImage ? (
+                    <Image
+                        src={mainImage.url}
+                        alt={mainImage.alt ?? petName}
+                        width={mainImage.width}
+                        height={mainImage.height}
+                        class:list={"w-full h-full object-cover rounded-2xl shadow rotate-1"}
+                        transition:name={`cat-image-${pet.id}`}
+                    />
+                ) : (
+                     <div class="w-full aspect-video bg-gray-200 rounded-2xl flex items-center justify-center">
+                        <p class="text-gray-500">Foto no disponible</p>
+                    </div>
+                )}
+
+                <div class="prose max-w-none">
+                    <h1 class="h2 text-teal-500 mt-16" transition:name={`cat-title-${pet.id}`}>
+                        {petName}
+                    </h1>
+                    {/* Usamos el 'content' del editor principal de WordPress para la descripción larga */}
+                    <div class="leading-loose" transition:name={`cat-description-${pet.id}`} set:html={pet.content.rendered}></div>
+                	<div class="not-prose">
+						<Button
+							href="#adoption-form"
+							color="fuchsia"
+							class:list={"button bg-gradient-to-r from-fuchsia-500 to-teal-500 text-white"}
+							>
+							 {pet.acf?.adoption_button_text || '¡Adóptame!'}
+							</Button
+						>
+					</div>
+				</div>
+            </div>
+        </Container>
+	</Section>
+
+	<Section class:list={"bg-white"}>
+		<Container>
+			<div class="overflow-hidden bg-white ring ring-fuchsia-500 rounded-2xl max-w-4xl mx-auto">
+				<div class="px-4 py-8 sm:px-6">
+					<h3>Información</h3>
+					<p class="mt-4 max-w-2xl">
+						 {introText}
+					</p>
+				</div>
+				<div class="border-t border-gray-100">
+					<dl class="divide-y divide-gray-100">
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Nombre</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{petName}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Género</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{genero}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Raza</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.breed}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Edad</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.age}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Fecha de nacimiento</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">
+								{formatDate(pet.acf?.birth_date ?? "")}
+							</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">¿Amigable con los niños?</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">
+								 {pet.acf?.is_child_friendly ? "Sí" : "No"}
+							</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">¿Amigable con los gatos?</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.is_cat_friendly ? "Sí" : "No"}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">¿Amigable con los perros?</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.is_dog_friendly ? "Sí" : "No"}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">¿Puede vivir en el exterior?</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.is_outside_cat ? "Sí" : "No"}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">¿Está esterilizado?</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">{pet.acf?.is_sterilized  ? "Sí" : "No"}</dd>
+						</div>
+
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+							<dt class="text-sm font-semibold">Disponible para adopción desde</dt>
+							<dd class="mt-1 sm:col-span-2 sm:mt-0 capitalize">
+								  {formatDate(pet.acf?.list_date ?? "")}
+							</dd>
+						</div>
+					</dl>
+				</div>
+			</div>
+		</Container>
+	</Section>
+
+	  <Section class:list={"bg-white scroll-mt-24"} id="adoption-form">
+        <Container>
+            <div class="max-w-4xl mx-auto ring ring-teal-500 rounded-2xl px-4 py-8 sm:px-6">
+                
+                {contactMethod === 'email' ? (
+                    <>
+                        <h3>Estoy interesado</h3>
+                        <p class="mt-4 max-w-2xl mb-16 text-balance">
+                            ¡Me encantaría adoptar a {petName}! Por favor contáctame con más información sobre la adopción.
+                        </p>
+                        <FormAdoption />
+                    </>
+                ) : (
+                    <>
+                        <h3>Contacta por WhatsApp</h3>
+                        <p class="mt-4 max-w-2xl mb-16 text-balance">
+                           ¿Interesado en {petName}? ¡Envíanos un mensaje directo para preguntar sobre la adopción!
+                        </p>
+                        {whatsappNumber && <ButtonWhatsapp phoneNumber={whatsappNumber} petName={petName} />}
+                    </>
+                )}
+
+            </div>
+        </Container>
+    </Section> 
+</Layout>
